@@ -13,9 +13,9 @@ pip install -r requirements.txt
 ## Run
 
 ```bash
-python easy_ml/train.py --config easy_ml/config.yaml
-python medium_nn/train.py --config medium_nn/config.yaml
-python hard_dl/train.py --config hard_dl/config.yaml
+python -m easy_ml.train
+python -m medium_nn.train
+python -m hard_dl.train
 ```
 
 Each task writes outputs to `outputs/<task_name>/`.
