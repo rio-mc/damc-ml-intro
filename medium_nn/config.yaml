@@ -13,22 +13,22 @@ data:
   metadata_columns: ["Name"]
 
 features:
-  columns:
+  columns:  # Directly refer to columns in the dataset
     - MolWt
     - MolLogP
     - TPSA
 
 model:
-  hidden_dims: [16]
+  hidden_dims: [16]  # Toggle by changing to values of 2^x
   dropout: false
-  dropout_p: 0.20
+  dropout_p: 0.20  # Between 0 and 1, only relevant if dropout is true
 
 training:
   epochs: 20
   learning_rate: 0.001
   weight_decay: 0.0
   early_stopping: false
-  patience: 3
+  patience: 3  # Number of epochs to wait for improvement before stopping, only relevant if early_stopping is true
   reduce_lr_on_plateau: false
-  lr_factor: 0.5
-  lr_patience: 3
+  lr_factor: 0.5  # Factor to reduce learning rate by, only relevant if reduce_lr_on_plateau is true
+  lr_patience: 3  # Number of epochs to wait for improvement before reducing learning rate, only relevant if reduce_lr_on_plateau is true

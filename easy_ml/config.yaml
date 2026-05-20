@@ -12,12 +12,12 @@ data:
   metadata_columns: ["Name"]
 
 features:
-  columns:
+  columns:  # Directly refer to columns in the dataset
     - MolWt
     - MolLogP
     - TPSA
 
 model:
-  n_estimators: 80
-  max_depth: 5
-  min_samples_leaf: 2
+  n_estimators: 80  # Number of trees in the forest, toggle by changing to values of 2^x
+  max_depth: 5  # Maximum depth of the tree, toggle by changing to values of 2^x
+  min_samples_leaf: 2  # Minimum number of samples required to be at a leaf node
