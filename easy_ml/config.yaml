@@ -1,0 +1,22 @@
+experiment:
+  seed: 42
+  output_dir: outputs/easy_ml
+
+data:
+  path: data/curated-solubility-dataset.csv
+  target_column: Solubility
+  train_fraction: 0.70
+  val_fraction: 0.15
+  test_fraction: 0.15
+  drop_missing: true
+
+features:
+  columns:
+    - MolWt
+    - MolLogP
+    - TPSA
+
+model:
+  n_estimators: 80
+  max_depth: 5
+  min_samples_leaf: 2

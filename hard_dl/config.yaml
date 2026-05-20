@@ -1,0 +1,32 @@
+experiment:
+  seed: 42
+  output_dir: outputs/hard_dl
+
+data:
+  path: data/processed/xrd_patterns.npz
+  train_fraction: 0.70
+  val_fraction: 0.15
+  test_fraction: 0.15
+  batch_size: 32
+  normalise_intensity: true
+
+model:
+  channels: [8, 16]
+  kernel_size: 7
+  dropout: false
+  dropout_p: 0.25
+
+training:
+  epochs: 20
+  learning_rate: 0.001
+  weight_decay: 0.0
+  early_stopping: false
+  patience: 4
+  reduce_lr_on_plateau: false
+  lr_factor: 0.5
+  lr_patience: 2
+
+augmentation:
+  enabled: false
+  noise_std: 0.02
+  shift_max: 3

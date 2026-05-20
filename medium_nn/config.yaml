@@ -1,0 +1,33 @@
+experiment:
+  seed: 42
+  output_dir: outputs/medium_nn
+
+data:
+  path: data/curated-solubility-dataset.csv
+  target_column: Solubility
+  train_fraction: 0.70
+  val_fraction: 0.15
+  test_fraction: 0.15
+  drop_missing: true
+  batch_size: 32
+
+features:
+  columns:
+    - MolWt
+    - MolLogP
+    - TPSA
+
+model:
+  hidden_dims: [32, 16]
+  dropout: false
+  dropout_p: 0.20
+
+training:
+  epochs: 20
+  learning_rate: 0.001
+  weight_decay: 0.0
+  early_stopping: false
+  patience: 3
+  reduce_lr_on_plateau: false
+  lr_factor: 0.5
+  lr_patience: 3
