@@ -19,7 +19,6 @@ from shared.plotting import (
 from shared.seed import set_seed
 from shared.splits import train_val_test_split
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="easy_ml/config.yaml")
@@ -45,11 +44,12 @@ def main():
 
     print("\n[1/5] Loading dataset")
 
-    X, y, features, dropped = load_tabular_dataset(
+    X, y, features, metadata, dropped = load_tabular_dataset(
         path=cfg["data"]["path"],
         target_column=cfg["data"]["target_column"],
         feature_columns=cfg["features"]["columns"],
         drop_missing=cfg["data"]["drop_missing"],
+        metadata_columns=cfg["data"].get("metadata_columns", []),
     )
 
     print(f"Dataset path: {cfg['data']['path']}")
@@ -63,9 +63,10 @@ def main():
 
     print("\n[2/5] Creating train / validation / test splits")
 
-    X_train, X_val, X_test, y_train, y_val, y_test = train_val_test_split(
+    X_train, X_val, X_test, y_train, y_val, y_test, meta_train, meta_val, meta_test = train_val_test_split(
         X,
         y,
+        metadata,
         cfg["data"]["train_fraction"],
         cfg["data"]["val_fraction"],
         cfg["data"]["test_fraction"],
@@ -85,8 +86,17 @@ def main():
 
     preview = pd.DataFrame(X_train[:5], columns=features)
     preview[cfg["data"]["target_column"]] = y_train[:5]
-    print(preview.round(3).to_string(index=False))
+    
+    # Safely check if meta_train exists, is a DataFrame, and actually has columns
+    if meta_train is not None and hasattr(meta_train, 'columns') and len(meta_train.columns) > 0:
+        name_col_name = meta_train.columns[0]
+        names_preview = meta_train.iloc[:5, 0].values
+        preview.insert(0, name_col_name, names_preview)
+    elif meta_train is not None and len(meta_train) > 0:
+        # Fallback if meta_train is a simple list or numpy array instead of a DataFrame
+        preview.insert(0, "Molecule Name", meta_train[:5])
 
+    print(preview.round(3).to_string(index=False))
 
     print("\nReminder:")
     print("- Train data updates model parameters.")
@@ -147,6 +157,13 @@ def main():
     print("The model receives only the descriptors, then predicts the target property.\n")
 
     prediction_preview = pd.DataFrame(X_test[:8], columns=features)
+    
+    # Insert the compound names for the test subset
+    if meta_test is not None and len(meta_test) > 0:
+        name_col_name = metadata.columns[0] if hasattr(metadata, 'columns') else "Compound Name"
+        names_test_preview = meta_test.iloc[:8].iloc[:, 0].values if hasattr(meta_test, 'iloc') else meta_test[:8]
+        prediction_preview.insert(0, name_col_name, names_test_preview)
+
     prediction_preview["measured"] = y_test[:8]
     prediction_preview["predicted"] = predictions["test"][:8]
     prediction_preview["error"] = prediction_preview["predicted"] - prediction_preview["measured"]
@@ -156,7 +173,7 @@ def main():
         output_dir / "prediction_examples.csv",
         index=False,
     )
-    
+
     metrics = {
         "train": regression_metrics(y_train, predictions["train"]),
         "validation": regression_metrics(y_val, predictions["validation"]),

@@ -18,6 +18,7 @@ from shared.plotting import (
     save_loss_curve,
     save_split_metric_plot,
     save_xrd_seen_unseen_plot,
+    save_confusion_matrix_plot,
 )
 from shared.seed import set_seed
 from shared.splits import train_val_test_split
@@ -26,7 +27,6 @@ from shared.torch_utils import (
     count_parameters,
     make_regression_loader,
 )
-
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -107,7 +107,7 @@ def main():
         path=cfg["data"]["path"],
         normalise_intensity=cfg["data"]["normalise_intensity"],
     )
-
+    metadata = pd.DataFrame(index=range(len(X)))
     print(f"Dataset path: {cfg['data']['path']}")
     print(f"X shape: {X.shape}")
     print(f"Classes: {list(class_names)}")
@@ -120,9 +120,10 @@ def main():
 
     print("\n[2/6] Creating train / validation / test splits")
 
-    X_train, X_val, X_test, y_train, y_val, y_test = train_val_test_split(
+    X_train, X_val, X_test, y_train, y_val, y_test, meta_train, meta_val, meta_test = train_val_test_split(
         X,
         y,
+        metadata,
         cfg["data"]["train_fraction"],
         cfg["data"]["val_fraction"],
         cfg["data"]["test_fraction"],
@@ -418,6 +419,28 @@ def main():
         title="Task 3: Train vs validation vs test accuracy",
         ylabel="Accuracy",
     )
+
+    # ---- Confusion Matrix (for Classification) ----
+    print("Generating validation and test confusion matrices...")
+    
+    save_confusion_matrix_plot(
+        y_true=y_val_true,
+        y_pred=y_val_pred,
+        class_names=class_names,
+        path=output_dir / "validation_confusion_matrix.png",
+        title="Task 3: Validation Confusion Matrix (Normalised)",
+        normalize=True,
+    )
+
+    save_confusion_matrix_plot(
+        y_true=y_test_true,
+        y_pred=y_test_pred,
+        class_names=class_names,
+        path=output_dir / "test_confusion_matrix.png",
+        title="Task 3: Test Confusion Matrix (Normalised)",
+        normalize=True,
+    )
+    # -----------------------------------------------------
 
     print(f"\nOutputs saved to: {output_dir}")
 

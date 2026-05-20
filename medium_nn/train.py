@@ -50,11 +50,12 @@ def main():
 
     print("\n[1/6] Loading descriptor dataset")
 
-    X, y, features, dropped = load_tabular_dataset(
+    X, y, features, metadata, dropped = load_tabular_dataset(
         path=cfg["data"]["path"],
         target_column=cfg["data"]["target_column"],
         feature_columns=cfg["features"]["columns"],
         drop_missing=cfg["data"]["drop_missing"],
+        metadata_columns=cfg["data"].get("metadata_columns", []),
     )
 
     print(f"Dataset path: {cfg['data']['path']}")
@@ -67,9 +68,10 @@ def main():
 
     print("\n[2/6] Creating train / validation / test splits")
 
-    X_train, X_val, X_test, y_train, y_val, y_test = train_val_test_split(
+    X_train, X_val, X_test, y_train, y_val, y_test, meta_train, meta_val, meta_test = train_val_test_split(
         X,
         y,
+        metadata,
         cfg["data"]["train_fraction"],
         cfg["data"]["val_fraction"],
         cfg["data"]["test_fraction"],
@@ -92,6 +94,15 @@ def main():
     print("------------------------------------------------------------")
     preview = pd.DataFrame(X_train[:5], columns=features)
     preview[cfg["data"]["target_column"]] = y_train[:5]
+    
+    # Safely insert the molecule name column if metadata exists
+    if metadata is not None and hasattr(metadata, 'shape') and metadata.shape[1] > 0:
+        name_col_name = metadata.columns[0]
+        names_preview = metadata.iloc[:5, 0].values
+        preview.insert(0, name_col_name, names_preview)
+    else:
+        print("(Note: No metadata/molecule names found in configuration, displaying descriptors only)")
+
     print(preview.round(3).to_string(index=False))
 
     print("\n[4/6] Building data loaders")
@@ -241,6 +252,21 @@ def main():
             f"MAE={values['mae']:.3f} | "
             f"R2={values['r2']:.3f}"
         )
+
+    print("\nExample test predictions")
+    print("------------------------------------------------------------")
+    prediction_preview = pd.DataFrame(X_test[:8], columns=features)
+    
+    if metadata is not None and hasattr(metadata, 'shape') and metadata.shape[1] > 0:
+        name_col_name = metadata.columns[0]
+        names_test_preview = metadata.iloc[:8, 0].values
+        prediction_preview.insert(0, name_col_name, names_test_preview)
+
+    prediction_preview["measured"] = y_test_true[:8]
+    prediction_preview["predicted"] = y_test_pred[:8]
+    prediction_preview["error"] = prediction_preview["predicted"] - prediction_preview["measured"]
+
+    print(prediction_preview.round(3).to_string(index=False))
 
     print(
         "Generalisation gap, validation RMSE - train RMSE: "

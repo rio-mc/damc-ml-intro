@@ -10,6 +10,7 @@ data:
   test_fraction: 0.15
   drop_missing: true
   batch_size: 32
+  metadata_columns: ["Name"]
 
 features:
   columns:

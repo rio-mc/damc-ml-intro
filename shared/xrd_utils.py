@@ -27,3 +27,4 @@ def save_xrd_preview(X, y, path: str | Path, n: int = 5):
     preview = pd.DataFrame(X[:n])
     preview.insert(0, "target", y[:n])
     preview.to_csv(path, index=False)
+

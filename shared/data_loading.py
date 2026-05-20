@@ -7,10 +7,18 @@ def load_tabular_dataset(
     target_column: str,
     feature_columns: list[str],
     drop_missing: bool = True,
+    metadata_columns: list[str] | None = None,
 ):
+    metadata_columns = metadata_columns or []
+
+    if target_column in feature_columns:
+        raise ValueError(
+            f"Target leakage: '{target_column}' is listed as both a feature and the target."
+        )
+
     df = pd.read_csv(path)
 
-    required = feature_columns + [target_column]
+    required = feature_columns + [target_column] + metadata_columns
     missing = [col for col in required if col not in df.columns]
     if missing:
         raise ValueError(f"Missing columns in dataset: {missing}")
@@ -26,5 +34,6 @@ def load_tabular_dataset(
 
     X = df[feature_columns].to_numpy(dtype="float32")
     y = df[target_column].to_numpy(dtype="float32")
+    metadata = df[metadata_columns].reset_index(drop=True)
 
-    return X, y, feature_columns, dropped
+    return X, y, feature_columns, metadata, dropped

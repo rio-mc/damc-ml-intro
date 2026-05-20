@@ -1,26 +1,25 @@
-# Easy challenge: Classical ML
+# Easy Challenge: Tree-Based Models & Molecular Descriptors
 
-## Bronze: Overfitting and model capacity
-Train random forests with different `max_depth` values and compare:
-- train RMSE
-- validation RMSE
-- train-validation gap
+## Bronze: Model Capacity & Overfitting
+Train a series of Random Forest models varying the `max_depth` (e.g., from 2 to 20) to predict your chemical property. Plot and compare the training RMSE, validation RMSE, and the train-validation gap.
 
-Think:
-- At what point does increasing depth stop improving generalisation?
-- How can you identify overfitting from the metrics alone?
+> ### Think:
+> * At what specific structural complexity (`max_depth`) does the model stop learning generalisable chemical trends and start memorising the training set? 
 
-## Silver: Stability and ensemble behaviour
-Change `n_estimators` and `min_samples_leaf` and compare the resulting validation performance.
+---
 
-Think:
-- Which hyperparameters improve robustness rather than simply reducing training error?
-- Does increasing ensemble size always improve the model meaningfully?
+## Silver: Robustness & Ensemble Behaviour
+Fix your depth, but experiment with `n_estimators` (number of trees) and `min_samples_leaf` (minimum molecules per leaf node). Observe how these affect your validation performance and prediction variance.
 
-## Gold: Representation dependence
-Train the model using reduced descriptor subsets.
+> ### Think:
+> * Which of these hyperparameters forces the model to learn broader, group-level chemical trends rather than getting distracted by structural outliers?
 
-Think:
-- Which descriptors appear most important?
-- Are the most influential descriptors chemically interpretable?
-- What does this reveal about the dependence of classical ML on handcrafted representations?
+---
+
+## Gold: Feature Importance & Chemical Intuition
+Train your best Random Forest model, extract the feature importances, and then retrain the model using only the top 5 or 10 descriptors. 
+
+> ### Think:
+> * If a purely statistical model relies heavily on a descriptor you wouldn't traditionally use in the lab, does that reveal a novel chemical correlation, or a bias in your dataset?
+> * What does this tell us about the limitations of relying on "handcrafted" chemical representations versus letting a model learn features directly from a molecular graph or spectrum?
+

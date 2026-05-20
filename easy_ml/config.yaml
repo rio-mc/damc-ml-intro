@@ -9,6 +9,7 @@ data:
   val_fraction: 0.15
   test_fraction: 0.15
   drop_missing: true
+  metadata_columns: ["Name"]
 
 features:
   columns:
