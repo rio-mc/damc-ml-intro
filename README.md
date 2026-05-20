@@ -1,6 +1,6 @@
 # DAMC ML, Neural Networks, Deep Learning Workshop
 
-A lightweight CPU-only workshop repo for three progressively harder modelling tasks.
+A lightweight CPU-only workshop repo for three progressively modern modelling tasks.
 
 ## Setup
 
