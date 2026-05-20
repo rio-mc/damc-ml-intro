@@ -19,7 +19,3 @@ python hard_dl/train.py --config hard_dl/config.yaml
 ```
 
 Each task writes outputs to `outputs/<task_name>/`.
-
-## Core rule
-
-Use the validation set to make modelling decisions. Use the test set only for final evaluation.
