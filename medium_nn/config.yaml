@@ -19,7 +19,7 @@ features:
     - TPSA
 
 model:
-  hidden_dims: [32, 16]
+  hidden_dims: [16]
   dropout: false
   dropout_p: 0.20
 
