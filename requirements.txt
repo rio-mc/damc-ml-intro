@@ -5,5 +5,3 @@ matplotlib
 pyyaml
 tqdm
 torch
-mp-api
-pymatgen
