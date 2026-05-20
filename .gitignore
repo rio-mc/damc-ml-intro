@@ -12,7 +12,6 @@ env/
 # Local outputs
 outputs/
 results/
-preprocessing/
 
 # IDE / OS
 .vscode/

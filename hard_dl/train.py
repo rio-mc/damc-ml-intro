@@ -386,7 +386,7 @@ def main():
 
     print("\nBaseline comparison:")
     print(f"Random guessing across {len(class_names)} classes gives ~{1 / len(class_names):.2f} accuracy.")
-    print("The CNN should significantly exceed this if it is learning useful diffraction structure.")
+    print("The CNN test accuracy should significantly exceed this if it is learning useful diffraction structure.")
 
     print(f"\nTotal training time: {total_time:.2f}s")
 
