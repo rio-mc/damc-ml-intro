@@ -13,6 +13,7 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from hard_dl.augment import augment_xrd
 from hard_dl.model import XRDCNN
+from shared.ascii_logger import log_cnn_ascii
 from shared.config import load_config
 from shared.plotting import (
     save_loss_curve,
@@ -216,6 +217,8 @@ def main():
 
     stopper = EarlyStopping(cfg["training"]["patience"])
 
+    log_cnn_ascii(cfg, n_points=X.shape[1], n_classes=len(class_names), theta=theta)
+
     print(f"Channels: {cfg['model']['channels']}")
     print(f"Kernel size: {cfg['model']['kernel_size']}")
     print(f"Trainable parameters: {count_parameters(model)}")
@@ -226,7 +229,7 @@ def main():
     print("\nParameter guide:")
     print("- channels controls how many learned filters each convolution layer has.")
     print("  More channels can learn more peak motifs, but increase capacity and runtime.")
-    print("- kernel_size controls the local 2θ window each filter sees.")
+    print("- kernel_size controls the local 2-theta window each filter sees.")
     print("  Small kernels focus on narrow local patterns; larger kernels see broader peak regions.")
     print("- dropout randomly switches off part of the classifier during training.")
     print("  This can reduce overfitting in small scientific datasets.")
@@ -448,7 +451,7 @@ def main():
     print("- Turn augmentation on and compare validation accuracy and runtime.")
     print("- Increase channels and inspect whether train accuracy improves faster than validation accuracy.")
     print("- Change kernel_size and consider what size of peak region the CNN should see.")
-    print("- Disable learning-rate scheduling and compare training stability.")
+    print("- Enable learning-rate scheduling and compare training stability.")
 
 
 if __name__ == "__main__":

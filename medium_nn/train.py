@@ -11,6 +11,7 @@ from sklearn.preprocessing import StandardScaler
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from medium_nn.model import MLPRegressor
+from shared.ascii_logger import log_mlp_ascii
 from shared.config import load_config
 from shared.data_loading import load_tabular_dataset
 from shared.metrics import generalisation_gap, regression_metrics
@@ -148,6 +149,8 @@ def main():
     print("\nNetwork architecture:")
 
     input_dim = X_train.shape[1]
+    log_mlp_ascii(cfg, input_dim=input_dim)
+
     print(f"Input layer: {input_dim} descriptor features")
 
     for i, hidden_dim in enumerate(hidden_dims, start=1):

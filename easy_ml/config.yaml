@@ -1,3 +1,4 @@
+# KEEP THESE
 experiment:
   seed: 42
   output_dir: outputs/easy_ml
@@ -11,6 +12,7 @@ data:
   drop_missing: true
   metadata_columns: ["Name"]
 
+# CHANGE THESE
 features:
   columns:  # Directly refer to columns in the dataset
     - MolWt

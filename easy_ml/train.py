@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
+from shared.ascii_logger import log_random_forest_ascii
 from shared.config import load_config
 from shared.data_loading import load_tabular_dataset
 from shared.metrics import generalisation_gap, regression_metrics
@@ -109,6 +110,7 @@ def main():
     print(f"n_estimators      = {cfg['model']['n_estimators']}")
     print(f"max_depth         = {cfg['model']['max_depth']}")
     print(f"min_samples_leaf  = {cfg['model']['min_samples_leaf']}")
+    log_random_forest_ascii(cfg)
 
     print("\nParameter guide:")
     print("- n_estimators:")

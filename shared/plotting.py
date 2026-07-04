@@ -153,7 +153,7 @@ def save_xrd_seen_unseen_plot(
 
     axes[1].plot(theta, test_pattern)
     axes[1].set_title(f"Unseen test sample | true: {test_true} | predicted: {test_pred}")
-    axes[1].set_xlabel("2θ")
+    axes[1].set_xlabel("2-theta")
     axes[1].set_ylabel("Intensity")
     axes[1].grid(alpha=0.25)
 

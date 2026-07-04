@@ -37,7 +37,7 @@ class XRDCNN(nn.Module):
         # ------------------------------------------------------------
         # This part scans across the XRD pattern and learns local peak
         # motifs. A convolutional filter is a small sliding window over
-        # neighbouring 2θ positions.
+        # neighbouring 2-theta positions.
 
         feature_layers = []
         in_channels = 1
