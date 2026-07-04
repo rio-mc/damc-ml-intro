@@ -13,8 +13,8 @@ data:
 
 # CHANGE THESE
 model:
-  channels: [8, 16]  # kernel_size=7 means each convolution looks at about 0.959 degrees of 2-theta at a time. This is derived from the 2-theta space (10-80 degrees). 70 degrees / 512 samples = 0.137 degrees per sample.
-  kernel_size: 7
+  channels: [8, 16]
+  kernel_size: 7  # kernel_size=7 means each convolution looks at about 0.959 degrees of 2-theta at a time. This is derived from the 2-theta space (10-80 degrees). 70 degrees / 512 samples = 0.137 degrees per sample.
   dropout: false
   dropout_p: 0.25
 
